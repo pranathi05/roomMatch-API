@@ -1,5 +1,6 @@
 import User from '../models/user.mjs';
 
+
 const isValidNumberInput = (number) =>
   number !== undefined && number !== null && !Number.isNaN(number);
 export const getUserInfo = (req, res) => {

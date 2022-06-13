@@ -56,9 +56,9 @@ export const sendOTP = async (req, res) => {
 
       transporter
         .sendMail({
-          from: '"Find Roommate" <findroommatehere@gmail.com>',
+          from: '"Find Roommate" <pranathifinalproject@gmail.com>',
           to: email,
-          subject: 'OTP Verificatiom',
+          subject: 'OTP verification',
           html: htmlToSend,
         })
         .then(() => console.log('Email sent.'))
@@ -74,7 +74,7 @@ export const sendOTP = async (req, res) => {
         return res.status(200).json({ message: 'OTP sent successfully.' });
       })
       .catch(() => {
-        return res.status(500).json({ message: 'Some error occured.' });
+        return res.status(500).json({ message: 'OTP cannot be sent.Some error occurred' });
       });
   } else {
     return res.status(400).json({ message: 'Invalid email address.' });
@@ -132,7 +132,7 @@ export const registerUser = async (req, res) => {
     try {
       bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
         if (err) {
-          return res.status(500).json({ message: 'Some error occurred.' });
+          return res.status(500).json({ message: 'User cannot be logged in.' });
         }
         const newUser = new User({
           email,
@@ -168,13 +168,15 @@ export const registerUser = async (req, res) => {
           });
       });
     } catch {
-      return res.status(500).json({ message: 'Some error occurred.' });
+      return res.status(500).json({ message: 'User cannot be logged in.' });
     }
   }
 };
 
 export const userLogin = async (req, res) => {
+  console.log('inside user login')
   const { email, password } = req?.body;
+  console.log(email, password)
   if (email && password) {
     User.findOne({ email })
       .then((user) => {

@@ -16,7 +16,7 @@ app.use('/api', testRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
-app.listen(5000, () => {
+app.listen(3020, () => {
   console.log('Server started.');
   connectDatabase();
 });
