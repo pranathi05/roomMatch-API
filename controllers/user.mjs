@@ -15,6 +15,7 @@ export const updateUserInfo = (req, res) => {
   const { name, preferences } = req?.body;
   const {
     age,
+    gender,
     residence,
     rent,
     guestsAllowed,
@@ -27,7 +28,7 @@ export const updateUserInfo = (req, res) => {
   } = preferences;
   if (
     name &&
-    isValidNumberInput(age) &&
+    isValidNumberInput(age) && gender &&
     residence &&
     isValidNumberInput(rent?.from) &&
     isValidNumberInput(rent?.to) &&
@@ -41,6 +42,7 @@ export const updateUserInfo = (req, res) => {
         name,
         preferences: {
           age,
+          gender,
           residence,
           rent,
           guestsAllowed,
@@ -71,6 +73,7 @@ export const getUsers = async (req, res) => {
       const usersWithScore = users?.map(({ name, email, preferences }) => {
         const {
           age,
+          gender,
           residence,
           rent,
           guestsAllowed,
@@ -83,6 +86,10 @@ export const getUsers = async (req, res) => {
         } = preferences;
         let score = 0;
         if (Math.abs(currentUser?.preferences?.age - age) <= 5) {
+          score++;
+        }
+        if(currentUser?.preferences?.gender === gender)
+        {
           score++;
         }
         if (
@@ -144,4 +151,12 @@ export const getUsers = async (req, res) => {
         );
     })
     .catch(() => res.status(500).json({ message: 'Some error occured.' }));
+};
+
+export const getUserById =  (req, res) => {
+  User.findOne({ _id: req.params.userId })
+    .then((user) => {
+      return res.status(200).json(user);
+    })
+    .catch(() => res.status(404).json({ message: 'User does not exist.' }));
 };

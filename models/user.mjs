@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     name: String,
     preferences: {
       age: Number,
+      gender: String,
       residence: String,
       rent: {
         from: Number,
@@ -19,6 +20,7 @@ const userSchema = new mongoose.Schema(
       isStudent: Boolean,
       sleepTime: String,
       mealStatus: Boolean,
+      url : String
     },
   },
   {

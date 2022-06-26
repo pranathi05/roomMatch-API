@@ -99,6 +99,7 @@ export const registerUser = async (req, res) => {
   const { email, name, password, preferences } = req?.body;
   const {
     age,
+    gender,
     residence,
     rent,
     guestsAllowed,
@@ -113,6 +114,9 @@ export const registerUser = async (req, res) => {
 
   if (!validate(email)) {
     return res.status(400).json({ message: 'Invalid email address.' });
+  }
+  if(joining === 0){
+    return res.status(400).json({message: ' Joining days should be more than 0'})
   }
   if (!name?.trim()) {
     return res.status(400).json({ message: 'Name should not be empty.' });
@@ -140,6 +144,7 @@ export const registerUser = async (req, res) => {
           password: hashedPassword,
           preferences: {
             age,
+            gender,
             residence,
             rent,
             guestsAllowed,
