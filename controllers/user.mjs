@@ -3,6 +3,7 @@ import User from '../models/user.mjs';
 
 const isValidNumberInput = (number) =>
   number !== undefined && number !== null && !Number.isNaN(number);
+
 export const getUserInfo = (req, res) => {
   const userId = req?.user?.userId;
   User.findOne({ _id: userId })
@@ -14,44 +15,51 @@ export const getUserInfo = (req, res) => {
 export const updateUserInfo = (req, res) => {
   const { name, preferences } = req?.body;
   const {
-    age,
-    gender,
-    residence,
-    rent,
-    guestsAllowed,
-    smokingAllowed,
-    joining,
-    idealLocation,
-    isStudent,
-    sleepTime,
-    mealStatus,
+    gender , 
+    hometown ,
+    currentcity ,
+    needroommate ,
+    otherbranch ,
+    workex ,
+    distuni ,
+    apttype ,
+    rentbudget ,
+    alcohol ,
+    foodpref ,
+    smoking ,
+    culskills ,
+    lookingforroommate ,
+    dept ,
+    hall ,
+    maxppr
   } = preferences;
   if (
     name &&
-    isValidNumberInput(age) && gender &&
-    residence &&
-    isValidNumberInput(rent?.from) &&
-    isValidNumberInput(rent?.to) &&
-    rent?.from <= rent?.to &&
-    isValidNumberInput(joining) &&
-    idealLocation
+    isValidNumberInput(workex) && gender &&
+    isValidNumberInput(distuni)
   ) {
     User.findOneAndUpdate(
       { _id: req?.user?.userId },
       {
         name,
         preferences: {
-          age,
-          gender,
-          residence,
-          rent,
-          guestsAllowed,
-          smokingAllowed,
-          joining,
-          idealLocation,
-          isStudent,
-          sleepTime,
-          mealStatus,
+          gender , 
+          hometown ,
+          currentcity ,
+          needroommate ,
+          otherbranch ,
+          workex ,
+          distuni ,
+          apttype ,
+          rentbudget ,
+          alcohol ,
+          foodpref ,
+          smoking ,
+          culskills ,
+          lookingforroommate ,
+          dept ,
+          hall ,
+          maxppr
         },
       }
     )
@@ -72,70 +80,25 @@ export const getUsers = async (req, res) => {
     .then((users) => {
       const usersWithScore = users?.map(({ name, email, preferences }) => {
         const {
-          age,
           gender,
-          residence,
-          rent,
-          guestsAllowed,
-          smokingAllowed,
-          joining,
-          idealLocation,
-          isStudent,
-          sleepTime,
-          mealStatus,
+          hometown,
+          currentcity,
+          needroommate,
+          otherbranch,
+          workex,
+          distuni,
+          apttype,
+          rentbudget,
+          alcohol,
+          foodpref,
+          smoking,
+          culskills,
+          lookingforroommate,
+          dept,
+          hall,
+          maxppr
         } = preferences;
-        let score = 0;
-        if (Math.abs(currentUser?.preferences?.age - age) <= 5) {
-          score++;
-        }
-        if(currentUser?.preferences?.gender === gender)
-        {
-          score++;
-        }
-        if (
-          currentUser?.preferences?.residence
-            ?.toLowerCase()
-            ?.includes(residence?.toLowerCase()) ||
-          residence
-            ?.toLowerCase()
-            ?.includes(currentUser?.preferences?.residence?.toLowerCase())
-        ) {
-          score++;
-        }
-        if (currentUser?.preferences?.rent?.to <= rent?.to) {
-          score++;
-        }
-        if (currentUser?.preferences?.guestsAllowed === guestsAllowed) {
-          score++;
-        }
-        if (currentUser?.preferences?.smokingAllowed === smokingAllowed) {
-          score++;
-        }
-        if (currentUser?.preferences?.isStudent === isStudent) {
-          score++;
-        }
-        if (currentUser?.preferences?.mealStatus === mealStatus) {
-          score++;
-        }
-        if (Math.abs(currentUser?.preferences?.joining - joining) <= 2) {
-          score++;
-        }
-        if (currentUser?.preferences?.mealStatus === mealStatus) {
-          score++;
-        }
-        if (currentUser?.preferences?.sleepTime === sleepTime) {
-          score++;
-        }
-        if (
-          currentUser?.preferences?.idealLocation
-            ?.toLowerCase()
-            ?.includes(idealLocation?.toLowerCase()) ||
-          idealLocation
-            ?.toLowerCase()
-            ?.includes(currentUser?.preferences?.idealLocation?.toLowerCase())
-        ) {
-          score++;
-        }
+        let score = Math.floor(Math.random()*10);
         return { score, preferences, name, email };
       });
 
@@ -154,7 +117,7 @@ export const getUsers = async (req, res) => {
 };
 
 export const getUserById =  (req, res) => {
-  User.findOne({ _id: req.params.userId })
+  User.findOne({ email: req.params.email })
     .then((user) => {
       return res.status(200).json(user);
     })

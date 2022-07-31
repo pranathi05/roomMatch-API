@@ -6,8 +6,6 @@ import { connectDatabase } from './db/mongoose.mjs';
 import { authRoutes } from './routes/auth.mjs';
 import { testRoutes } from './routes/test.mjs';
 import { userRoutes } from './routes/user.mjs';
-import { messageRoutes } from './routes/message.mjs';
-import { conversationRoutes } from './routes/conversation.mjs';
 
 config();
 
@@ -20,8 +18,6 @@ app.use(express.json());
 app.use('/api', testRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/conversation',conversationRoutes);
-app.use('/api/message',messageRoutes);
 
 app.listen(3020, () => {
   console.log('Server started.');

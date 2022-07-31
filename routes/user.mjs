@@ -5,4 +5,4 @@ export const userRoutes = express.Router();
 userRoutes.get('/', checkAuth, getUserInfo);
 userRoutes.patch('/', checkAuth, updateUserInfo);
 userRoutes.get('/all', checkAuth, getUsers);
-userRoutes.get('/:userId',getUserById);
+userRoutes.get('/:email',getUserById);

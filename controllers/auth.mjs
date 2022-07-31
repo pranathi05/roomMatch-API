@@ -9,6 +9,7 @@ import User from '../models/user.mjs';
 import { validate } from 'email-validator';
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
+import axios from 'axios';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const readHTMLFile = (path, callback) => {
   fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
@@ -20,6 +21,30 @@ const readHTMLFile = (path, callback) => {
     }
   });
 };
+
+const createUserForChat =(email,name) =>{
+  
+    const data = {
+      "username":name,
+      "email":email,
+      "secret":email
+    }
+    var config = {
+      method: 'post',
+      url: 'https://api.chatengine.io/users/',
+      headers: {
+        'PRIVATE-KEY': `${process.env.PRIVATEKEY}`
+      },
+      data : data
+    };
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
 export const sendOTP = async (req, res) => {
   const email = req?.body?.email;
   const alreadSentOTP = await OTP.findOne({ email });
@@ -97,26 +122,30 @@ export const verifyOTP = async (req, res) => {
 
 export const registerUser = async (req, res) => {
   const { email, name, password, preferences } = req?.body;
+  createUserForChat(email,name);
   const {
-    age,
-    gender,
-    residence,
-    rent,
-    guestsAllowed,
-    smokingAllowed,
-    joining,
-    idealLocation,
-    isStudent,
-    sleepTime,
-    mealStatus,
+    gender , 
+    hometown ,
+    currentcity ,
+    needroommate ,
+    otherbranch ,
+    workex ,
+    distuni ,
+    apttype ,
+    rentbudget ,
+    alcohol ,
+    foodpref ,
+    smoking ,
+    culskills ,
+    lookingforroommate ,
+    dept ,
+    hall ,
+    maxppr
   } = preferences;
   const saltRounds = 10;
 
   if (!validate(email)) {
     return res.status(400).json({ message: 'Invalid email address.' });
-  }
-  if(joining === 0){
-    return res.status(400).json({message: ' Joining days should be more than 0'})
   }
   if (!name?.trim()) {
     return res.status(400).json({ message: 'Name should not be empty.' });
@@ -143,17 +172,23 @@ export const registerUser = async (req, res) => {
           name,
           password: hashedPassword,
           preferences: {
-            age,
-            gender,
-            residence,
-            rent,
-            guestsAllowed,
-            smokingAllowed,
-            joining,
-            idealLocation,
-            isStudent,
-            sleepTime,
-            mealStatus,
+            gender , 
+            hometown ,
+            currentcity ,
+            needroommate ,
+            otherbranch ,
+            workex ,
+            distuni ,
+            apttype ,
+            rentbudget ,
+            alcohol ,
+            foodpref ,
+            smoking ,
+            culskills ,
+            lookingforroommate ,
+            dept ,
+            hall ,
+            maxppr
           },
         });
         newUser
